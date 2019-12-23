@@ -8,5 +8,7 @@ Help:
 	example:
 	RProcdump -server http://127.0.0.1 -login administrator -pass password123
 
+Need local privileges !!!
+
  Author: @ThebenyGreen
   - EyesOpenSecurity

