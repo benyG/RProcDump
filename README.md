@@ -8,7 +8,9 @@ Help:
 	example:
 	RProcdump -server http://127.0.0.1 -login administrator -pass password123
 
-Need local privileges !!!
+Need local admin privileges !!!
 
  Author: @ThebenyGreen
   - EyesOpenSecurity
+  
+Credits: Mark Russinovich Sysinternals- psexec.exe and Procdump.exe
